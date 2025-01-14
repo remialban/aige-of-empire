@@ -143,16 +143,32 @@ class NewGameMenu:
         players = self.players_var.get()
         map_size = self.map_size_var.get()
         map_mode = self.map_mode_var.get()
+
         print(f"Starting game with {players} player(s), map size {map_size}, map mode {map_mode}.")
-        #messagebox.showinfo("Start Game",
-                            #f"Game started with {players} player(s), map size {map_size}, map mode {map_mode}!")
+
 
         player1 = Player("eee", "MAGENTA")
         player2 = Player("eee", "RED")
-        players = {player1, player2}
 
-        map = Map(100,20, RessourceModes.NORMAL, PlayerModes.LEAN, players)
-        game = Game(players=players, map=map)
+        if players == 1:
+            players_set = {player1}
+        else:
+            players_set = {player1, player2}
+
+        if map_size == "120x120":
+            map_width, map_height = 120, 120
+        elif map_size == "168x168":
+            map_width, map_height = 168, 168
+        else:
+            map_width, map_height = 120, 120  # Taille par défaut
+
+
+        map = Map(map_width, map_height, RessourceModes.NORMAL, PlayerModes.LEAN, players_set)
+
+
+        game = Game(players=players_set, map=map)
+
+
         UIManager.set_game(game)
         UIManager.get_current_ui().cleanup()
         UIManager.change_ui(UIList.GUI)
