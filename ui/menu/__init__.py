@@ -102,27 +102,42 @@ class NewGameMenu:
         self.players_option1.pack(pady=2)
         self.players_option2.pack(pady=2)
 
-        # Map Size
+        # Map Size (Dynamic linear sliders for width and height)
         self.map_size_label = tk.Label(self.window, text="Map Size:", **button_style)
-        self.map_size_label.pack(pady=5)
-        self.map_size_var = tk.StringVar(value="120x120")
-        self.map_size_option1 = tk.Radiobutton(self.window, text="120x120", variable=self.map_size_var, value="120x120",
-                                               **button_style)
-        self.map_size_option2 = tk.Radiobutton(self.window, text="168x168", variable=self.map_size_var, value="168x168",
-                                               **button_style)
-        self.map_size_option1.pack(pady=2)
-        self.map_size_option2.pack(pady=2)
+        self.map_size_label.pack(pady=5, padx=50)
+
+        # Width slider
+        self.map_width_slider = tk.Scale(self.window, from_=50, to=400, resolution=10, orient=tk.HORIZONTAL,
+                                         label="Width", length=300, **button_style)
+        self.map_width_slider.set(120)  # Default value
+        self.map_width_slider.pack(pady=10, padx=50)
+
+        # Height slider
+        self.map_height_slider = tk.Scale(self.window, from_=50, to=400, resolution=10, orient=tk.HORIZONTAL,
+                                          label="Height", length=300, **button_style)
+        self.map_height_slider.set(120)  # Default value
+        self.map_height_slider.pack(pady=10, padx=50)
 
         # Map Mode
         self.map_mode_label = tk.Label(self.window, text="Map Mode:", **button_style)
-        self.map_mode_label.pack(pady=5)
+        self.map_mode_label.pack(pady=5, padx=50)
         self.map_mode_var = tk.StringVar(value="Resource Variation")
         self.map_mode_option1 = tk.Radiobutton(self.window, text="Resource Variation", variable=self.map_mode_var,
-                                               value="Resource Variation", **button_style)
+                                               value="Resource Variation", command=self.update_mode_options,
+                                               **button_style)
         self.map_mode_option2 = tk.Radiobutton(self.window, text="Starting Resources", variable=self.map_mode_var,
-                                               value="Starting Resources", **button_style)
-        self.map_mode_option1.pack(pady=2)
-        self.map_mode_option2.pack(pady=2)
+                                               value="Starting Resources", command=self.update_mode_options,
+                                               **button_style)
+        self.map_mode_option1.pack(pady=2, padx=50)
+        self.map_mode_option2.pack(pady=2, padx=50)
+
+        # Mode Specific Options (dropdown menu)
+        self.mode_option_label = tk.Label(self.window, text="Mode Options:", **button_style)
+        self.mode_option_label.pack(pady=5, padx=50)
+        self.mode_option_var = tk.StringVar(value="Normal")  # Default value
+        self.mode_option_menu = tk.OptionMenu(self.window, self.mode_option_var, "Gold Rush", "Generous", "Normal")
+        self.mode_option_menu.config(**button_style)
+        self.mode_option_menu.pack(pady=5, padx=50)
 
         # Start Button
         self.start_button = tk.Button(self.window, text="Start Game", command=self.start_game, **button_style)
@@ -131,6 +146,25 @@ class NewGameMenu:
         # Back Button
         self.back_button = tk.Button(self.window, text="Back", command=self.back_to_main_menu, **button_style)
         self.back_button.pack(pady=10)
+
+    def update_mode_options(self):
+        """Update the mode options based on selected map mode"""
+        selected_map_mode = self.map_mode_var.get()
+
+        # Clear the current option menu and update it
+        menu = self.mode_option_menu
+        menu['menu'].delete(0, 'end')
+
+        if selected_map_mode == "Resource Variation":
+            # Options for Resource Variation
+            resource_modes = ["Gold Rush", "Generous", "Normal"]
+            for mode in resource_modes:
+                menu['menu'].add_command(label=mode, command=tk._setit(self.mode_option_var, mode))
+        else:
+            # Options for Player Modes
+            player_modes = ["Lean", "Mean", "Marines"]
+            for mode in player_modes:
+                menu['menu'].add_command(label=mode, command=tk._setit(self.mode_option_var, mode))
 
     def update(self):
         pass  # No dynamic updates needed for this screen
@@ -141,10 +175,11 @@ class NewGameMenu:
 
     def start_game(self):
         players = self.players_var.get()
-        map_size = self.map_size_var.get()
+        map_width = self.map_width_slider.get()  # Utilisation correcte
+        map_height = self.map_height_slider.get()# Get height from slider
         map_mode = self.map_mode_var.get()
 
-        print(f"Starting game with {players} player(s), map size {map_size}, map mode {map_mode}.")
+        print(f"Starting game with {players} player(s), map size  {map_width}x{map_height}, map mode {map_mode}.")
 
 
         player1 = Player("eee", "MAGENTA")
@@ -154,14 +189,6 @@ class NewGameMenu:
             players_set = {player1}
         else:
             players_set = {player1, player2}
-
-        if map_size == "120x120":
-            map_width, map_height = 120, 120
-        elif map_size == "168x168":
-            map_width, map_height = 168, 168
-        else:
-            map_width, map_height = 120, 120  # Taille par défaut
-
 
         map = Map(map_width, map_height, RessourceModes.NORMAL, PlayerModes.LEAN, players_set)
 
@@ -176,4 +203,6 @@ class NewGameMenu:
     def back_to_main_menu(self):
         self.cleanup()
         MenuTkinter(self.master)
+
+
 
