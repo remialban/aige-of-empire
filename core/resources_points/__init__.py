@@ -8,12 +8,14 @@ from core.resource import Resource
 class ResourcePoint:
     __position: Position
     __resources: Resource
+    __health_point : int
 
 
 
     def __init__(self, position: Position ,resource : Resource) -> None:
         self.__position = position
         self.__resources = resource
+        self.__health_point = 100
 
     def get_resources(self) -> Resource:
         return self.__resources
@@ -23,6 +25,9 @@ class ResourcePoint:
 
     def get_resource(self):
         return self.__resources
+
+    def get_health_points(self):
+        return self.__health_point
 
     def collect(self, amount: float, max_stock:int, stock : Resource) :
 

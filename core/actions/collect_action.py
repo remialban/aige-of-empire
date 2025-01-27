@@ -30,28 +30,27 @@ class Collect_Action(Action):
 
     def do_action(self):
         self.before_action()
-        if (self.get_new_time() - self.get_old_time()) > timedelta(seconds = 1):
-            if isinstance(self.__collected, ResourcePoint) and (self.__void.get_wood() + self.__void.get_food() + self.__void.get_gold() < 20):
+        if (self.get_new_time() - self.get_old_time()) > timedelta(seconds = 1) :
+            if isinstance(self.__collected, ResourcePoint) and (self.__villager.get_stock()["wood"] + self.__villager.get_stock()["food"]+self.__villager.get_stock()["gold"] < 20):
 
-                if isinstance(self.__collected, Mine):
+                if isinstance(self.__collected, Mine) :
                     self.__collected.collect(0.46666666666666666666667, self.__villager.get_max_stock(), self.__void)
                     self.__villager.collect_resources("gold", 0.46666666666666666666667)
                     self.after_action()
 
 
-                elif isinstance(self.__collected, Wood):
-                    self.__collected.collect(5, self.__villager.get_max_stock(), self.__void)
+                elif isinstance(self.__collected, Wood)  :
+                    self.__collected.collect(0.46666666666666666666667, self.__villager.get_max_stock(), self.__void)
                     self.__villager.collect_resources("wood", 0.46666666666666666666667)
                     self.after_action()
 
 
-            elif isinstance(self.__collected, Farm) and (self.__void.get_wood() + self.__void.get_food() + self.__void.get_gold() < 20) and (self.__collected.get_health_points() >0):
-                self.__void.add_food(0.46666666666666666666667)
+            elif isinstance(self.__collected, Farm) and (self.__villager.get_stock()["wood"] + self.__villager.get_stock()["food"]+self.__villager.get_stock()["gold"] < 20) and (self.__collected.get_health_points() >0):
                 self.__collected.collect(0.46666666666666666666667)
                 self.__villager.collect_resources("food", 0.46666666666666666666667)
                 self.after_action()
 
-            elif self.__void.get_wood() + self.__void.get_food() + self.__void.get_gold() >= 20 or self.__collected.get_resource() == Resource(0, 0, 0) :
+            elif self.__villager.get_stock()["wood"] + self.__villager.get_stock()["food"]+self.__villager.get_stock()["gold"] >= 20 or self.__collected.get_resource() == Resource(0, 0, 0) :
                 return True
 
             elif self.__collected.get_health_points() <=0:
