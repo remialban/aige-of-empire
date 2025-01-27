@@ -1,5 +1,3 @@
-from tkinter import messagebox
-
 import tkinter as tk
 from PIL import Image, ImageTk
 
@@ -19,8 +17,7 @@ class MENU(UI):
 
 
     def update(self):
-        pass  # No dynamic updates needed for this screen
-
+        pass  
     def cleanup(self):
         self.root.quit()
 
@@ -61,7 +58,7 @@ class MenuTkinter:
 
     def load_game(self):
         print("Load game selected.")
-        messagebox.showinfo("Load Game", "Game loaded!")
+        
 
     def quit_game(self):
         print("Quit game selected.")
@@ -77,8 +74,8 @@ class NewGameMenu:
     def __init__(self, master, bg_photo):
         self.master = master
         self.bg_photo = bg_photo
-        self.bg_image = Image.open("assets/background.jpg")  # Vérifie si ce fichier existe
-        self.bg_image = self.bg_image.resize((900, 700), Image.Resampling.LANCZOS)  # Taille agrandie
+        self.bg_image = Image.open("assets/background.jpg")  
+        self.bg_image = self.bg_image.resize((900, 700), Image.Resampling.LANCZOS)  
         self.bg_photo = ImageTk.PhotoImage(self.bg_image)
 
         self.bg_label = tk.Label(self.master, image=self.bg_photo)
@@ -86,9 +83,7 @@ class NewGameMenu:
 
         button_style = {"bg": "white", "font": ("Helvetica", 14), "fg": "black", "relief": "solid", "borderwidth": 2}
 
-        center_x = 400  # Position horizontale ajustée pour centrer les éléments
-
-        # Section pour le nombre de joueurs
+        center_x = 400 
         self.players_label = tk.Label(self.master, text="Number of Players:", **button_style)
         self.players_label.place(x=center_x, y=50)
         self.players_var = tk.IntVar(value=1)
@@ -97,7 +92,7 @@ class NewGameMenu:
         self.players_option1.place(x=center_x, y=90)
         self.players_option2.place(x=center_x + 100, y=90)
 
-        # Section pour la taille de la carte
+       
         self.map_size_label = tk.Label(self.master, text="Map Size:", **button_style)
         self.map_size_label.place(x=center_x, y=140)
         self.map_width_slider = tk.Scale(self.master, from_=50, to=400, resolution=10, orient=tk.HORIZONTAL, label="Width", length=300, **button_style)
@@ -105,14 +100,14 @@ class NewGameMenu:
         self.map_height_slider = tk.Scale(self.master, from_=50, to=400, resolution=10, orient=tk.HORIZONTAL, label="Height", length=300, **button_style)
         self.map_height_slider.place(x=center_x, y=250)
 
-        # Boutons pour les modes de carte (Resource Variation et Starting Conditions)
+        
         self.resource_variation_button = tk.Label(self.master, text="Map Mode", **button_style)
         self.resource_variation_button.place(x=center_x, y=350)
 
         self.starting_conditions_button = tk.Label(self.master, text="Starting Conditions", **button_style)
         self.starting_conditions_button.place(x=center_x + 200, y=350)
 
-        # Menus déroulants (toujours visibles)
+       
         self.resource_mode_option_var = tk.StringVar(value="Gold Rush")
         self.resource_mode_option_menu = tk.OptionMenu(self.master, self.resource_mode_option_var, "Gold Rush", "Generous", "Normal")
         self.resource_mode_option_menu.config(**button_style)
@@ -123,7 +118,7 @@ class NewGameMenu:
         self.starting_resources_option_menu.config(**button_style)
         self.starting_resources_option_menu.place(x=center_x + 200, y=400)
 
-        # Boutons Start et Back
+        
         self.start_button = tk.Button(self.master, text="Start Game", command=self.start_game, **button_style)
         self.start_button.place(x=center_x + 200, y=500)
 
@@ -131,7 +126,6 @@ class NewGameMenu:
         self.back_button.place(x=center_x, y=500)
 
     def start_game(self):
-        # Obtenir les valeurs des sliders et autres options
         players = self.players_var.get()
         map_width = self.map_width_slider.get()
         map_height = self.map_height_slider.get()
@@ -140,7 +134,7 @@ class NewGameMenu:
 
         print(f"Starting game with {players} player(s), map size {map_width}x{map_height}, resource mode {resource_mode}, starting resources {starting_resources}.")
 
-        # Logique du jeu ici
+       
         player1 = Player("eee", "MAGENTA")
         player2 = Player("eee", "RED")
 
